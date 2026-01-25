@@ -1,0 +1,32 @@
+service: ats-integration
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: python3.9
+
+plugins:
+  - serverless-offline
+
+functions:
+  getJobs:
+    handler: handler.jobs
+    events:
+      - http:
+          path: jobs
+          method: get
+
+  createCandidate:
+    handler: handler.candidates
+    events:
+      - http:
+          path: candidates
+          method: post
+
+  getApplications:
+    handler: handler.applications
+    events:
+      - http:
+          path: applications
+          method: get
