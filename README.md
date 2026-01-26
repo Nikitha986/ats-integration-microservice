@@ -28,7 +28,7 @@ Zoho People uses **OAuth 2.0** authentication.
 3. Click **Add Client**
 4. Select **Server-based Application**
 5. Provide the following details:
-   - Client Name: ATS Integration Service
+   - Client Name:
    - Homepage URL: http://localhost
    - Redirect URI: http://localhost
 6. Create the client
