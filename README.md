@@ -2,7 +2,7 @@
 
 ---
 
-## How to Create Free Trial / Sandbox in the ATS
+## How to Create Free Trial
 
 This project uses **Zoho People** as the Applicant Tracking System (ATS).
 
