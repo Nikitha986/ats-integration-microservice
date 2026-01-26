@@ -3,3 +3,5 @@ __pycache__/
 .env
 node_modules/
 mock_db.json
+.serverless/
+*.pyc
