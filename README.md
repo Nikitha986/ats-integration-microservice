@@ -1,69 +1,63 @@
-# ATS Integration Microservice (Python + Serverless)
-
-## Project Overview
-This project is a backend microservice built in Python using the Serverless Framework.  
-It integrates with an Applicant Tracking System (ATS) to provide a unified REST API for jobs, candidates, and applications.
-
-Zoho People is used as the target ATS.
+# ATS Integration Microservice – README
 
 ---
 
-## ATS Integration Approach
-The service is designed to integrate with Zoho People as the underlying Applicant Tracking System (ATS).
+## How to Create Free Trial / Sandbox in the ATS
 
-For the purpose of this assignment and local demonstration:
-- Job data is mocked to match the unified API contract
-- Candidate creation and application workflows follow real ATS behavior
-- OAuth 2.0 authentication is implemented using Zoho People
-- Integration points are structured so the service can be connected to live Zoho People APIs in production
+This project uses **Zoho People** as the Applicant Tracking System (ATS).
+
+Steps to create a free trial account:
+
+1. Open the **Zoho People website**
+2. Click on **Start Free Trial**
+3. Sign up using an email address or Google account
+4. Complete the initial company setup (dummy company details are sufficient)
+5. After setup, you will be redirected to the Zoho People dashboard
+
+The free trial account is sufficient for testing authentication and ATS integration.
 
 ---
 
-## APIs Exposed
+## How to Generate API Key / Token
 
-### GET /jobs
-Returns a list of open jobs.
+Zoho People uses **OAuth 2.0** authentication.
 
-```json
-{
-  "id": "string",
-  "title": "string",
-  "location": "string",
-  "status": "OPEN | CLOSED | DRAFT",
-  "external_url": "string"
-}
+### Step 1: Create OAuth Client
+1. Open the **Zoho API Console**
+2. Log in using the same Zoho account
+3. Click **Add Client**
+4. Select **Server-based Application**
+5. Provide the following details:
+   - Client Name: ATS Integration Service
+   - Homepage URL: http://localhost
+   - Redirect URI: http://localhost
+6. Create the client
 
-###POST /candidates
+This generates:
+- Client ID
+- Client Secret
 
-Creates a candidate and attaches them to a job.
+---
 
-Request body:
+### Step 2: Generate Authorization Code
+1. Use the OAuth authorization flow from Zoho Accounts
+2. Grant permission when prompted
+3. After authorization, an authorization code will be generated
+4. Copy the authorization code
 
-{
-  "name": "string",
-  "email": "string",
-  "phone": "string",
-  "resume_url": "string",
-  "job_id": "string"
-}
+---
 
+### Step 3: Generate Refresh Token
+1. Exchange the authorization code for tokens using Zoho OAuth token generation
+2. From the response, store the **refresh token**
 
-Authentication (Zoho People OAuth 2.0)
+---
 
-Zoho People uses OAuth 2.0 authentication.
+### Step 4: Configure Environment Variables
+Create a `.env` file in the project root and add:
 
-Steps to generate credentials:
-
-Create a Zoho People free trial account
-
-Open Zoho API Console
-
-Create an OAuth client (Server-based application)
-
-Generate an authorization code
-
-Exchange the code for a refresh token
-
-Store credentials securely using environment variables
-
-The service uses the refresh token to generate short-lived access tokens dynamically.
+```env
+ZOHO_CLIENT_ID=your_client_id
+ZOHO_CLIENT_SECRET=your_client_secret
+ZOHO_REFRESH_TOKEN=your_refresh_token
+ZOHO_BASE_URL=zoho_people_api_domain
