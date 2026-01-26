@@ -20,39 +20,35 @@ def response(status, body):
 
 
 # -----------------------------
-# Pagination Helper
-# -----------------------------
-def paginate(items, page=1, limit=10):
-    start = (page - 1) * limit
-    end = start + limit
-    return items[start:end]
-
-
-# -----------------------------
 # GET /jobs
 # -----------------------------
+
 def jobs(event, context):
+    print("DEBUG: jobs() function called")
+
     try:
-        # Read pagination params if present
         params = event.get("queryStringParameters") or {}
+        print("DEBUG params:", params)
+
         page = int(params.get("page", 1))
         limit = int(params.get("limit", 10))
 
-        jobs_list = get_jobs()
+        print("DEBUG calling get_jobs with:", page, limit)
 
-        paginated_jobs = paginate(jobs_list, page, limit)
+        ats_response = get_jobs(page=page, limit=limit)
 
-        return response(200, {
-            "page": page,
-            "limit": limit,
-            "results": paginated_jobs
-        })
+        print("DEBUG ats_response:", ats_response)
+
+        return response(200, ats_response)
 
     except Exception as e:
+        print("DEBUG ERROR:", str(e))
         return response(500, {
             "error": "ATS_ERROR",
             "message": str(e)
         })
+
+
 
 
 # -----------------------------
