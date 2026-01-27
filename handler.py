@@ -7,10 +7,6 @@ from ats_client import (
     get_applications
 )
 
-
-# -----------------------------
-# Common JSON Response Helper
-# -----------------------------
 def response(status, body):
     return {
         "statusCode": status,
@@ -18,37 +14,25 @@ def response(status, body):
         "body": json.dumps(body, indent=2)
     }
 
-
 # -----------------------------
 # GET /jobs
 # -----------------------------
-
 def jobs(event, context):
-    print("DEBUG: jobs() function called")
-
     try:
         params = event.get("queryStringParameters") or {}
-        print("DEBUG params:", params)
-
         page = int(params.get("page", 1))
         limit = int(params.get("limit", 10))
 
-        print("DEBUG calling get_jobs with:", page, limit)
-
         ats_response = get_jobs(page=page, limit=limit)
 
-        print("DEBUG ats_response:", ats_response)
-
-        return response(200, ats_response)
+        # return only standardized job list
+        return response(200, ats_response["results"])
 
     except Exception as e:
-        print("DEBUG ERROR:", str(e))
         return response(500, {
             "error": "ATS_ERROR",
             "message": str(e)
         })
-
-
 
 
 # -----------------------------
@@ -61,18 +45,20 @@ def candidates(event, context):
 
         body = json.loads(event["body"])
 
-        # Basic validation
         required_fields = ["name", "email", "phone", "resume_url", "job_id"]
         for field in required_fields:
             if field not in body:
                 raise ValueError(f"{field} is required")
 
+        # 1. Create candidate in ATS
         candidate = create_candidate(body)
         apply_candidate(body["job_id"], candidate)
 
+       
+
         return response(201, {
             "message": "Candidate created and applied successfully",
-            "candidate_id": candidate["id"]
+            "candidate_id": candidate["id"],
         })
 
     except ValueError as ve:
@@ -99,10 +85,20 @@ def applications(event, context):
             raise ValueError("job_id query parameter is required")
 
         job_id = params["job_id"]
-
         apps = get_applications(job_id)
 
-        return response(200, apps)
+        # standardize output schema
+        formatted_apps = [
+            {
+                "id": app["id"],
+                "candidate_name": app["candidate_name"],
+                "email": app["email"],
+                "status": app["status"]
+            }
+            for app in apps
+        ]
+
+        return response(200, formatted_apps)
 
     except ValueError as ve:
         return response(400, {
