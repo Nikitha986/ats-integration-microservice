@@ -56,14 +56,16 @@ This generates:
 ### Step 4: Configure Environment Variables
 Create a `.env` file in the project root and add:
 
+
+
 ```env
 ZOHO_CLIENT_ID=your_client_id
 ZOHO_CLIENT_SECRET=your_client_secret
 ZOHO_REFRESH_TOKEN=your_refresh_token
 ZOHO_BASE_URL=zoho_people_api_domain
+```
 ---
-
-###📡 API Endpoints
+📡 API Endpoints
 GET /jobs
 
 Returns a list of jobs in a standardized format.
@@ -116,3 +118,5 @@ Response
     "status": "APPLIED | SCREENING | REJECTED | HIRED"
   }
 ]
+
+
