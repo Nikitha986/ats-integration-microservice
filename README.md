@@ -61,3 +61,58 @@ ZOHO_CLIENT_ID=your_client_id
 ZOHO_CLIENT_SECRET=your_client_secret
 ZOHO_REFRESH_TOKEN=your_refresh_token
 ZOHO_BASE_URL=zoho_people_api_domain
+---
+
+###📡 API Endpoints
+GET /jobs
+
+Returns a list of jobs in a standardized format.
+
+Response
+
+[
+  {
+    "id": "string",
+    "title": "string",
+    "location": "string",
+    "status": "OPEN | CLOSED | DRAFT",
+    "external_url": "string"
+  }
+]
+
+POST /candidates
+
+Creates a candidate and attaches them to a job.
+
+Request Body
+
+{
+  "name": "string",
+  "email": "string",
+  "phone": "string",
+  "resume_url": "string",
+  "job_id": "string"
+}
+
+
+Response
+
+{
+  "message": "Candidate created and applied successfully",
+  "candidate_id": "string"
+}
+
+GET /applications?job_id=...
+
+Returns applications for a given job.
+
+Response
+
+[
+  {
+    "id": "string",
+    "candidate_name": "string",
+    "email": "string",
+    "status": "APPLIED | SCREENING | REJECTED | HIRED"
+  }
+]
