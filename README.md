@@ -70,7 +70,7 @@ GET /jobs
 
 Returns a list of jobs in a standardized format.
 
-Response
+```Response
 
 [
   {
@@ -81,12 +81,12 @@ Response
     "external_url": "string"
   }
 ]
-
+```
 POST /candidates
 
 Creates a candidate and attaches them to a job.
 
-Request Body
+```Request Body
 
 {
   "name": "string",
@@ -95,8 +95,6 @@ Request Body
   "resume_url": "string",
   "job_id": "string"
 }
-
-
 Response
 
 {
@@ -104,11 +102,12 @@ Response
   "candidate_id": "string"
 }
 
+```
 GET /applications?job_id=...
 
 Returns applications for a given job.
 
-Response
+```Response
 
 [
   {
