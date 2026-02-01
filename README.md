@@ -4,15 +4,15 @@
 
 ## How to Create Free Trial
 
-This project uses **Zoho People** as the Applicant Tracking System (ATS).
+This project uses **Zoho Recruiter** as the Applicant Tracking System (ATS).
+
 
 Steps to create a free trial account:
-
-1. Open the **Zoho People website**
+1. Go to the **Zoho Recruiter** website: https://recruit.zoho.in/
 2. Click on **Start Free Trial**
-3. Sign up using an email address or Google account
-4. Complete the initial company setup (dummy company details are sufficient)
-5. After setup, you will be redirected to the Zoho People dashboard
+3. Sign up using your email address or Google account
+4. Complete the initial company setup (dummy company details are fine)
+5. After setup, you will be redirected to the Zoho Recruiter dashboard
 
 The free trial account is sufficient for testing authentication and ATS integration.
 
@@ -20,7 +20,7 @@ The free trial account is sufficient for testing authentication and ATS integrat
 
 ## How to Generate API Key / Token
 
-Zoho People uses **OAuth 2.0** authentication.
+Zoho Recruiter uses **OAuth 2.0** authentication.
 
 ### Step 1: Create OAuth Client
 1. Open the **Zoho API Console**
@@ -62,16 +62,17 @@ Create a `.env` file in the project root and add:
 ZOHO_CLIENT_ID=your_client_id
 ZOHO_CLIENT_SECRET=your_client_secret
 ZOHO_REFRESH_TOKEN=your_refresh_token
-ZOHO_BASE_URL=zoho_people_api_domain
 ```
 ---
 📡 API Endpoints
-GET /jobs
+## API Endpoints
 
-Returns a list of jobs in a standardized format.
+All endpoints are available under the `/dev` prefix when running locally with serverless-offline.
 
-```Response
+### GET /dev/jobs
+Returns a list of jobs from Zoho Recruiter in a standardized format:
 
+```
 [
   {
     "id": "string",
@@ -82,12 +83,12 @@ Returns a list of jobs in a standardized format.
   }
 ]
 ```
-POST /candidates
 
-Creates a candidate and attaches them to a job.
+### POST /dev/candidates
+Creates a candidate in Zoho Recruiter and applies them to a job.
 
-```Request Body
-
+Request body:
+```
 {
   "name": "string",
   "email": "string",
@@ -95,20 +96,18 @@ Creates a candidate and attaches them to a job.
   "resume_url": "string",
   "job_id": "string"
 }
-Response
-
+```
+Response:
+```
 {
   "message": "Candidate created and applied successfully",
   "candidate_id": "string"
 }
-
 ```
-GET /applications?job_id=...
 
-Returns applications for a given job.
-
-```Response
-
+### GET /dev/applications?job_id=...
+Returns applications for a given job (simulated due to Zoho Recruiter trial limitations):
+```
 [
   {
     "id": "string",
@@ -117,5 +116,48 @@ Returns applications for a given job.
     "status": "APPLIED | SCREENING | REJECTED | HIRED"
   }
 ]
+```
+
+---
+
+## How to Run Locally
+
+1. Install dependencies:
+   ```
+   pip install -r requirements.txt
+   npm install
+   ```
+2. Configure your `.env` file as described above.
+3. Start the serverless offline server:
+   ```
+   serverless offline
+   ```
+4. Test endpoints using curl or Postman (see above for URLs).
+
+---
+
+## Example curl Calls
+
+Get jobs:
+```
+curl http://localhost:3000/dev/jobs
+```
+
+Create candidate (replace job_id):
+```
+Invoke-WebRequest -Uri http://localhost:3000/dev/candidates -Method POST -Headers @{"Content-Type"="application/json"} -Body '{"name":"John Doe","email":"john@example.com","phone":"1234567890","resume_url":"https://example.com/resume.pdf","job_id":"<REAL_JOB_ID>"}'
+```
+
+Get applications:
+```
+curl "http://localhost:3000/dev/applications?job_id=<REAL_JOB_ID>"
+```
+
+---
+
+## Notes
+- All job and candidate operations use the real Zoho Recruiter API.
+- Application creation/listing is simulated due to Zoho Recruiter trial API limitations.
+- Candidates created via the API will appear in your Zoho Recruiter dashboard under "Candidates".
 
 

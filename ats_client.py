@@ -8,32 +8,7 @@ from zoho_auth import get_access_token
 # ---------------------------------
 ZOHO_BASE_URL = "https://recruit.zoho.in/recruit/v2"
 
-# ---------------------------------
-# MOCK JOBS (SAFE & REQUIRED)
-# ---------------------------------
-MOCK_JOBS = [
-    {
-        "id": "job_1",
-        "title": "Software Engineer",
-        "location": "Remote",
-        "status": "OPEN",
-        "external_url": "https://example.com/jobs/1"
-    },
-    {
-        "id": "job_2",
-        "title": "Backend Developer",
-        "location": "Bangalore",
-        "status": "OPEN",
-        "external_url": "https://example.com/jobs/2"
-    },
-    {
-        "id": "job_3",
-        "title": "Data Analyst",
-        "location": "Hyderabad",
-        "status": "DRAFT",
-        "external_url": "https://example.com/jobs/3"
-    }
-]
+# (MOCK_JOBS removed: all job operations use real Zoho Recruiter API)
 
 # ---------------------------------
 # COMMON HEADERS
@@ -49,19 +24,31 @@ def _headers():
 # ---------------------------------
 def get_jobs(page=1, limit=10):
     """
-    Zoho Recruit trial accounts restrict Job Openings APIs.
-    Hence jobs are mocked, which is acceptable and documented.
+    Fetch job openings from Zoho Recruit API.
     """
-
-    start = (page - 1) * limit
-    end = start + limit
-    jobs = MOCK_JOBS[start:end]
-
+    url = f"{ZOHO_BASE_URL}/JobOpenings"
+    params = {
+        "page": page,
+        "per_page": limit
+    }
+    res = requests.get(url, headers=_headers(), params=params, timeout=10)
+    res.raise_for_status()
+    data = res.json().get("data", [])
+    jobs = []
+    for job in data:
+        jobs.append({
+            "id": job.get("id"),
+            "title": job.get("Job_Title"),
+            "location": job.get("City"),
+            "status": job.get("Status"),
+            "external_url": job.get("Job_Url")
+        })
+    has_more = len(data) == limit
     return {
         "results": jobs,
         "page": page,
         "limit": limit,
-        "has_more": end < len(MOCK_JOBS)
+        "has_more": has_more
     }
 
 # ---------------------------------

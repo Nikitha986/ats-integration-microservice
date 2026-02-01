@@ -1,5 +1,9 @@
+
 import os
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 ZOHO_TOKEN_URL = "https://accounts.zoho.in/oauth/v2/token"
 
