@@ -11,7 +11,7 @@ Steps to create a free trial account:
 1. Go to the **Zoho Recruiter** website: https://recruit.zoho.in/
 2. Click on **Start Free Trial**
 3. Sign up using your email address or Google account
-4. Complete the initial company setup (dummy company details are fine)
+4. Complete the initial company setup 
 5. After setup, you will be redirected to the Zoho Recruiter dashboard
 
 The free trial account is sufficient for testing authentication and ATS integration.
